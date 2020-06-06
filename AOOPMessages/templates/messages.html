@@ -1,39 +1,16 @@
 {% extends "base.html" %}
-{% block title %}Messages{% endblock %}
+{% block title %}Inbox{% endblock %}
 
 {% block content %}
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
             <h1>
-                Messages
+                Inbox
             </h1>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12">
-            <form action="/messages" method="POST">
-                <div class="form-group">
-                    <label for="to">To</label>
-                    <select class="form-control" id="to" name="to">
-                        {% for user in users %}
-                        <option value="{{user.id}}">{{ user.email }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="title">Title</label>
-                    <input type="text" class="form-control" id="title" name="title" placeholder="Title">
-                </div>
-                <div class="form-group">
-                    <label for="body">Message</label>
-                    <textarea class="form-control" id="body" name="body" rows="3"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Send</button>
-            </form>
-        </div>
-    </div>
-    <div class="row mt-3">
         {% if receivedMessages|length > 0 %}
         {% for message in receivedMessages %}
         <div class="col-md-12 col-lg-6">

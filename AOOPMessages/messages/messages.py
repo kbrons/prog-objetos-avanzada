@@ -20,17 +20,25 @@ def home():
         receiver_id=current_user.id
     ).all()
 
+    return render_template('messages.html',
+                           receivedMessages=receivedMessages)
+
+
+@messages.route('/messages/send', methods=['GET'])
+def send():
+    if not current_user.is_authenticated:
+        return redirect(url_for('auth.login'))
+
     users = User.query.filter(
         User.id != current_user.id
     ).all()
 
-    return render_template('messages.html',
-                           receivedMessages=receivedMessages,
+    return render_template('send_message.html',
                            users=users)
 
 
-@messages.route('/messages', methods=['POST'])
-def send_message():
+@messages.route('/messages/send', methods=['POST'])
+def send_post():
     if not current_user.is_authenticated:
         return redirect(url_for('auth.login'))
 

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Messages{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>
+                Messages
+            </h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <form action="/messages" method="POST">
+                <div class="form-group">
+                    <label for="to">To</label>
+                    <select class="form-control" id="to" name="to">
+                        {% for user in users %}
+                        <option value="{{user.id}}">{{ user.email }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" class="form-control" id="title" name="title" placeholder="Title">
+                </div>
+                <div class="form-group">
+                    <label for="body">Message</label>
+                    <textarea class="form-control" id="body" name="body" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Send</button>
+            </form>
+        </div>
+    </div>
+    <div class="row mt-3">
+        {% if receivedMessages|length > 0 %}
+        {% for message in receivedMessages %}
+        <div class="col-md-12 col-lg-6">
+            <div class="card mt-2">
+                <div class="card-body">
+                    <h5 class="card-title">{{ message.author_id }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ message.title }} - {{ message.timestamp.strftime('%Y-%m-%d') }}</h6>
+                    <p class="card-text">{{ message.body }}</p>
+                    <!-- <a href="#" class="card-link">Card link</a> -->
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="col-md-12 text-center">
+            You haven't received any messages yet.
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

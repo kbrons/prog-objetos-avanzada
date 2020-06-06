@@ -26,6 +26,9 @@ def create_app(config_name='development'):
     from AOOPMessages.auth.auth import auth
     app.register_blueprint(auth)
 
+    from AOOPMessages.messages.messages import messages
+    app.register_blueprint(messages)
+
     from AOOPMessages.errors.errors_handler import errors
     app.register_blueprint(errors)
 

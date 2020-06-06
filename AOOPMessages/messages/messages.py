@@ -12,7 +12,7 @@ messages = Blueprint('messages', __name__)
 
 
 @messages.route('/messages', methods=['GET'])
-def home():
+def inbox():
     if not current_user.is_authenticated:
         return redirect(url_for('auth.login'))
 
@@ -52,4 +52,4 @@ def send_post():
     db.session.add(message)
     db.session.commit()
 
-    return redirect(url_for('messages.home'))
+    return redirect(url_for('messages.inbox'))

@@ -31,7 +31,7 @@ def login_post():
 
     if user is not None and check_password_hash(user.password, password):
         login_user(user)
-        return render_template('profile.html', email=email)
+        return redirect(url_for('messages.inbox'))
     else:
         flash('Please check your login details and try again...')
         return redirect(url_for('auth.login'))

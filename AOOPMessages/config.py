@@ -1,4 +1,5 @@
 import os
+from tempfile import gettempdir
 
 
 class Config:
@@ -15,7 +16,11 @@ class DevelopmentConfig(Config):
 
 class TestingConfig(Config):
 
-    SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URI')
+    TESTING = True
+    DEBUG = False
+    LOGIN_DISABLED = True
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + \
+        os.path.join(gettempdir(), 'test.db')
 
 
 class ProductionConfig(Config):

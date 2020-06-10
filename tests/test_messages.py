@@ -119,6 +119,20 @@ class MessagesTests(unittest.TestCase):
         self.assertIn("Login",
                       str(response.data))
 
+    def test_send_get_not_logged_in(self):
+        response = self.test_client.get(
+            '/messages/send', follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Login",
+                      str(response.data))
+
+    def test_send_post_not_logged_in(self):
+        response = self.test_client.post(
+            '/messages/send', follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Login",
+                      str(response.data))
+
 
 if __name__ == "__main__":
     unittest.main()

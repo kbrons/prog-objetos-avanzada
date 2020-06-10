@@ -113,6 +113,12 @@ class MessagesTests(unittest.TestCase):
         self.assertNotIn(self.testMessage2.timestamp.strftime('%Y-%m-%d'),
                          str(response.data))
 
+    def test_inbox_not_logged_in(self):
+        response = self.test_client.get('/messages', follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Login",
+                      str(response.data))
+
 
 if __name__ == "__main__":
     unittest.main()

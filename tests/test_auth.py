@@ -7,7 +7,7 @@ from werkzeug.security import generate_password_hash
 TEST_DB = 'test.db'
 
 
-class BasicTests(unittest.TestCase):
+class AuthTests(unittest.TestCase):
 
     # executed prior to each test
     def setUp(self):

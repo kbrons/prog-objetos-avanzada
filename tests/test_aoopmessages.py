@@ -40,6 +40,10 @@ class BasicTests(unittest.TestCase):
         self.assertIn("Advanced object oriented programming",
                       str(response.data))
 
+    def test_404(self):
+        response = self.test_client.get('/non-existent', follow_redirects=True)
+        self.assertEqual(response.status_code, 404)
+
     def test_successful_login(self):
         response = self.test_client.get('/login', follow_redirects=True)
         self.assertEqual(response.status_code, 200)

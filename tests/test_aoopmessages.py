@@ -96,6 +96,48 @@ class BasicTests(unittest.TestCase):
         self.assertIn("Login",
                       str(response.data))
 
+    def test_successful_signup(self):
+        response = self.test_client.get('/signup', follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Sign Up",
+                      str(response.data))
+        self.assertIn("Email",
+                      str(response.data))
+        self.assertIn("Password",
+                      str(response.data))
+
+        response = self.test_client.post(
+            '/signup', data=dict(email=self.testUser.email,
+                                 password=self.testUserPassword
+                                 ),
+            follow_redirects=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Advanced object oriented programming",
+                      str(response.data))
+
+    def test_failed_signup(self):
+        response = self.test_client.get('/signup', follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Sign Up",
+                      str(response.data))
+        self.assertIn("Email",
+                      str(response.data))
+        self.assertIn("Password",
+                      str(response.data))
+
+        self.create_test_user()
+
+        response = self.test_client.post(
+            '/signup', data=dict(email=self.testUser.email,
+                                 password=self.testUserPassword
+                                 ),
+            follow_redirects=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Email address already exists...",
+                      str(response.data))
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -43,9 +43,6 @@ class MessagesTests(unittest.TestCase):
 
         self.assertEqual(app.debug, False)
 
-    def tearDown(self):
-        pass
-
     def create_test_users(self):
         with self.app.app_context():
             db.session.add(self.testUser)
@@ -119,12 +116,55 @@ class MessagesTests(unittest.TestCase):
         self.assertIn("Login",
                       str(response.data))
 
+    @patch('flask_login.utils._get_user')
+    def test_send_get(self, current_user):
+        self.create_test_users()
+
+        current_user.return_value = self.testUser
+
+        response = self.test_client.get(
+            '/messages/send', follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Send a message",
+                      str(response.data))
+        self.assertIn(self.testUser2.email,
+                      str(response.data))
+
     def test_send_get_not_logged_in(self):
         response = self.test_client.get(
             '/messages/send', follow_redirects=True)
         self.assertEqual(response.status_code, 200)
         self.assertIn("Login",
                       str(response.data))
+
+    @patch('flask_login.utils._get_user')
+    def test_send_post(self, current_user):
+        self.create_test_users()
+
+        current_user.return_value = self.testUser
+
+        title = "test title send post"
+        body = "test body send post"
+        to = self.testUser2.id
+
+        response = self.test_client.post(
+            '/messages/send',
+            data=dict(title=title,
+                      body=body,
+                      to=to
+                      ),
+            follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Inbox",
+                      str(response.data))
+
+        with self.app.app_context():
+            self.assertIsNotNone(Message.query.filter_by(
+                receiver_id=to,
+                author_id=self.testUser.id,
+                title=title,
+                body=body
+            ).first())
 
     def test_send_post_not_logged_in(self):
         response = self.test_client.post(

@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import patch
 from AOOPMessages import create_app, db
 from AOOPMessages.models import User
 from werkzeug.security import generate_password_hash
@@ -136,6 +137,30 @@ class AuthTests(unittest.TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertIn("Email address already exists...",
+                      str(response.data))
+
+    @patch('flask_login.utils._get_user')
+    def test_login_get_logged_in(self, current_user):
+        current_user.return_value = self.testUser
+
+        response = self.test_client.get(
+            '/login',
+            follow_redirects=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Advanced object oriented programming",
+                      str(response.data))
+
+    @patch('flask_login.utils._get_user')
+    def test_signup_get_logged_in(self, current_user):
+        current_user.return_value = self.testUser
+
+        response = self.test_client.get(
+            '/signup',
+            follow_redirects=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Advanced object oriented programming",
                       str(response.data))
 
 

@@ -3,6 +3,7 @@ from flask import redirect
 from flask import render_template
 from flask import Blueprint
 from flask import request
+from flask import flash
 from flask_login import current_user
 from AOOPMessages import db
 from AOOPMessages.models import Message, User
@@ -42,14 +43,40 @@ def send_post():
     if not current_user.is_authenticated:
         return redirect(url_for('auth.login'))
 
-    message = Message(
-        author_id=current_user.id,
-        receiver_id=int(request.form.get('to')),
-        title=request.form.get('title'),
-        body=request.form.get('body')
-    )
+    try:
+        receiver_id = get_valid_user_id(request.form.get('to'))
 
-    db.session.add(message)
-    db.session.commit()
+        message = Message(
+            author_id=current_user.id,
+            receiver_id=receiver_id,
+            title=request.form.get('title'),
+            body=request.form.get('body')
+        )
 
-    return redirect(url_for('messages.inbox'))
+        db.session.add(message)
+        db.session.commit()
+
+        return redirect(url_for('messages.inbox'))
+
+    except UserException as e:
+        flash(message=str(e), category='error')
+        return redirect(url_for('messages.send'))
+
+
+def get_valid_user_id(rawId):
+    try:
+        userId = int(rawId)
+        if userId < 0:
+            raise ValueError
+
+        user = User.query.filter_by(id=userId).first()
+        if user is None:
+            raise UserException("The user doesn't exist")
+
+        return user.id
+    except (ValueError, TypeError):
+        raise UserException("The user id is not valid")
+
+
+class UserException(Exception):
+    pass

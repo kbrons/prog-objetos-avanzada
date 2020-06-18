@@ -10,7 +10,18 @@
             </h1>
         </div>
     </div>
-    <div class="row">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="row mt-3">
+        <div class="col-md-12">
+            <div class="alert alert-danger" role="alert">
+                {{ messages[0] }}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% endwith %}
+    <div class="row mt-3">
         <div class="col-md-12">
             <form action="/messages/send" method="POST">
                 <div class="form-group">

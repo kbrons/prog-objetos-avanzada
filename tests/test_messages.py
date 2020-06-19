@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, Mock
 from AOOPMessages import create_app, db
 from AOOPMessages.models import User, Message
 from werkzeug.security import generate_password_hash
@@ -139,14 +139,41 @@ class MessagesTests(unittest.TestCase):
                       str(response.data))
 
     @patch('flask_login.utils._get_user')
-    def test_send_post(self, current_user):
+    @patch('AOOPMessages.messages.helpers.get_valid_user_id')
+    def test_send_post(self, get_valid_user_id_mock, current_user):
         self.create_test_users()
 
         current_user.return_value = self.testUser
 
         title = "test title send post"
         body = "test body send post"
+        to = 100
+
+        error_message = "test error message"
+        get_valid_user_id_mock.side_effect = Mock(
+            side_effect=UserException(error_message))
+
+        response = self.test_client.post(
+            '/messages/send',
+            data=dict(title=title,
+                      body=body,
+                      to=to
+                      ),
+            follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Send a message",
+                      str(response.data))
+        self.assertIn(error_message,
+                      str(response.data))
+
+        current_user.return_value = self.testUser
+
+        title = "test title send post"
+        body = "test body send post"
         to = self.testUser2.id
+
+        get_valid_user_id_mock.side_effect = None
+        get_valid_user_id_mock.return_value = to
 
         response = self.test_client.post(
             '/messages/send',

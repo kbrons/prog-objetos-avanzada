@@ -7,7 +7,8 @@ from flask import flash
 from flask_login import current_user
 from AOOPMessages import db
 from AOOPMessages.models import Message, User
-from AOOPMessages.messages.helpers import get_valid_user_id, UserException
+from AOOPMessages.messages.helpers import UserException
+from AOOPMessages.messages import helpers
 
 
 messages = Blueprint('messages', __name__)
@@ -45,7 +46,8 @@ def send_post():
         return redirect(url_for('auth.login'))
 
     try:
-        receiver_id = get_valid_user_id(request.form.get('to'))
+        receiver_id = helpers.get_valid_user_id(
+            request.form.get('to'))
 
         message = Message(
             author_id=current_user.id,

@@ -139,6 +139,26 @@ class AuthTests(unittest.TestCase):
         self.assertIn("Email address already exists...",
                       str(response.data))
 
+        response = self.test_client.post(
+            '/signup', data=dict(
+                                 password=self.testUserPassword
+                                 ),
+            follow_redirects=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Email is required",
+                      str(response.data))
+
+        response = self.test_client.post(
+            '/signup', data=dict(
+                                 email="testEmail@test.com"
+                                 ),
+            follow_redirects=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Password is required",
+                      str(response.data))
+
     @patch('flask_login.utils._get_user')
     def test_login_get_logged_in(self, current_user):
         current_user.return_value = self.testUser

@@ -49,6 +49,14 @@ def signup_post():
     email = request.form.get('email')
     password = request.form.get('password')
 
+    if email is None or email == "":
+        flash('Email is required')
+        return redirect(url_for('auth.signup'))
+
+    if password is None or password == "":
+        flash('Password is required')
+        return redirect(url_for('auth.signup'))
+
     user = User.query.filter_by(email=email).first()
 
     if user:

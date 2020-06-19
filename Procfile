@@ -1,1 +1,1 @@
-web: flask run
+web: gunicorn "AOOPMessages:create_app('production')" --log-file -

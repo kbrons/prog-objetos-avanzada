@@ -7,6 +7,7 @@ from flask import flash
 from flask_login import current_user
 from AOOPMessages import db
 from AOOPMessages.models import Message, User
+from AOOPMessages.messages.helpers import get_valid_user_id, UserException
 
 
 messages = Blueprint('messages', __name__)
@@ -61,22 +62,3 @@ def send_post():
     except UserException as e:
         flash(message=str(e), category='error')
         return redirect(url_for('messages.send'))
-
-
-def get_valid_user_id(rawId):
-    try:
-        userId = int(rawId)
-        if userId < 0:
-            raise ValueError
-
-        user = User.query.filter_by(id=userId).first()
-        if user is None:
-            raise UserException("The user doesn't exist")
-
-        return user.id
-    except (ValueError, TypeError):
-        raise UserException("The user id is not valid")
-
-
-class UserException(Exception):
-    pass

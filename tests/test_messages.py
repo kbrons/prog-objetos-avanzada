@@ -4,7 +4,7 @@ from AOOPMessages import create_app, db
 from AOOPMessages.models import User, Message
 from werkzeug.security import generate_password_hash
 from datetime import datetime, timedelta
-from AOOPMessages.messages import get_valid_user_id, UserException
+from AOOPMessages.messages.helpers import get_valid_user_id, UserException
 
 TEST_DB = 'test.db'
 
@@ -176,18 +176,17 @@ class MessagesTests(unittest.TestCase):
 
     def test_get_valid_user_id(self):
         self.create_test_users()
+        with self.app.app_context():
+            self.assertRaises(UserException, get_valid_user_id, None)
 
-        self.assertRaises(UserException, get_valid_user_id)
+            self.assertRaises(UserException, get_valid_user_id, "notAnId")
 
-        self.assertRaises(UserException, get_valid_user_id, "notAnId")
+            self.assertRaises(UserException, get_valid_user_id, "100")
 
-        self.assertRaises(UserException, get_valid_user_id, "100")
+            self.assertRaises(UserException, get_valid_user_id, 100)
 
-        self.assertRaises(UserException, get_valid_user_id, 100)
+            self.assertRaises(UserException, get_valid_user_id, -1)
 
-        self.assertRaises(UserException, get_valid_user_id, -1)
-
-        with self.app.app_context:
             userId = User.query.first().id
             id = get_valid_user_id(userId)
             self.assertEqual(userId, id)

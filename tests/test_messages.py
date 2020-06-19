@@ -79,7 +79,7 @@ class MessagesTests(unittest.TestCase):
                       str(response.data))
         self.assertIn(self.testMessage2.timestamp.strftime('%Y-%m-%d'),
                       str(response.data))
-        self.assertIn(str(self.testMessage2.author_id),
+        self.assertIn(str(self.testUser2.email),
                       str(response.data))
 
         self.assertNotIn(self.testMessage.title,
@@ -101,7 +101,7 @@ class MessagesTests(unittest.TestCase):
                       str(response.data))
         self.assertIn(self.testMessage.timestamp.strftime('%Y-%m-%d'),
                       str(response.data))
-        self.assertIn(str(self.testMessage.author_id),
+        self.assertIn(str(self.testUser.email),
                       str(response.data))
 
         self.assertNotIn(self.testMessage2.title,

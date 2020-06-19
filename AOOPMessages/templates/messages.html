@@ -16,7 +16,7 @@
         <div class="col-md-12 col-lg-6">
             <div class="card mt-2">
                 <div class="card-body">
-                    <h5 class="card-title">{{ message.author_id }}</h5>
+                    <h5 class="card-title">{{ message.author.email }}</h5>
                     <h6 class="card-subtitle mb-2 text-muted">{{ message.title }} - {{ message.timestamp.strftime('%Y-%m-%d') }}</h6>
                     <p class="card-text">{{ message.body }}</p>
                     <!-- <a href="#" class="card-link">Card link</a> -->

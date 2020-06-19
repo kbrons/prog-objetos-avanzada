@@ -2,6 +2,7 @@ from AOOPMessages import db
 from AOOPMessages import login_manager
 from datetime import datetime
 from flask_login import UserMixin
+from sqlalchemy.orm import relationship
 
 
 @login_manager.user_loader
@@ -31,3 +32,5 @@ class Message(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     receiver_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    author = relationship("User", foreign_keys=[author_id])
+    receiver = relationship("User", foreign_keys=[receiver_id])

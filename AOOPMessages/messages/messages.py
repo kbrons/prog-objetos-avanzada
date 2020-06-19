@@ -21,6 +21,8 @@ def inbox():
 
     receivedMessages = Message.query.filter_by(
         receiver_id=current_user.id
+    ).join(
+        Message.author
     ).all()
 
     return render_template('messages.html',

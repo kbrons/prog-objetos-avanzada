@@ -14,6 +14,9 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 auth = Blueprint('auth', __name__)
 
+MAIN_HOME_BLUEPRINT = 'main.home'
+AUTH_SIGNUP_BLUEPRINT = 'auth.signup'
+
 
 @auth.route('/login', methods=['GET'])
 def login():
@@ -30,7 +33,7 @@ def login():
     """
 
     if current_user.is_authenticated:
-        return redirect(url_for('main.home'))
+        return redirect(url_for(MAIN_HOME_BLUEPRINT))
     return render_template('login.html')
 
 
@@ -82,7 +85,7 @@ def signup():
     """
 
     if current_user.is_authenticated:
-        return redirect(url_for('main.home'))
+        return redirect(url_for(MAIN_HOME_BLUEPRINT))
     return render_template('signup.html')
 
 
@@ -116,17 +119,17 @@ def signup_post():
 
     if email is None or email == "":
         flash('Email is required')
-        return redirect(url_for('auth.signup'))
+        return redirect(url_for(AUTH_SIGNUP_BLUEPRINT))
 
     if password is None or password == "":
         flash('Password is required')
-        return redirect(url_for('auth.signup'))
+        return redirect(url_for(AUTH_SIGNUP_BLUEPRINT))
 
     user = User.query.filter_by(email=email).first()
 
     if user:
         flash('Email address already exists...')
-        return redirect(url_for('auth.signup'))
+        return redirect(url_for(AUTH_SIGNUP_BLUEPRINT))
 
     new_user = User(email=email,
                     password=generate_password_hash(password))
@@ -134,7 +137,7 @@ def signup_post():
     db.session.add(new_user)
     db.session.commit()
 
-    return redirect(url_for('main.home'))
+    return redirect(url_for(MAIN_HOME_BLUEPRINT))
 
 
 @auth.route('/logout')
@@ -149,4 +152,4 @@ def logout():
     """
 
     logout_user()
-    return redirect(url_for('main.home'))
+    return redirect(url_for(MAIN_HOME_BLUEPRINT))

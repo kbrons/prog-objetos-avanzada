@@ -25,10 +25,6 @@ def load_user(user_id):
     -------
         User
             User instance of the logged in user.
-
-    .. _PEP 484:
-        https://www.python.org/dev/peps/pep-0484/
-
     """
 
     return User.query.get(int(user_id))
@@ -47,7 +43,6 @@ class User(db.Model, UserMixin):
             Email of the user.
         password : str
             Hashed password of the user.
-
     """
 
     __tablename__ = 'users'
@@ -83,7 +78,6 @@ class Message(db.Model):
             User that sent the message.
         receiver : User
             User that received the message.
-
     """
 
     __tablename__ = 'messages'

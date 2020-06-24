@@ -214,9 +214,9 @@ class MessagesTests(unittest.TestCase):
 
             self.assertRaises(UserNotExistsError, get_valid_user_id, -1)
 
-            userId = User.query.first().id
-            id = get_valid_user_id(userId)
-            self.assertEqual(userId, id)
+            user_id = User.query.first().id
+            id = get_valid_user_id(user_id)
+            self.assertEqual(user_id, id)
 
 
 if __name__ == "__main__":

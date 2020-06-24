@@ -4,7 +4,7 @@ from AOOPMessages import create_app, db
 from AOOPMessages.models import User, Message
 from werkzeug.security import generate_password_hash
 from datetime import datetime, timedelta
-from AOOPMessages.messages.helpers import get_valid_user_id, UserException
+from AOOPMessages.messages.helpers import get_valid_user_id, UserNotExistsError
 
 TEST_DB = 'test.db'
 
@@ -151,7 +151,7 @@ class MessagesTests(unittest.TestCase):
 
         error_message = "test error message"
         get_valid_user_id_mock.side_effect = Mock(
-            side_effect=UserException(error_message))
+            side_effect=UserNotExistsError(error_message))
 
         response = self.test_client.post(
             '/messages/send',
@@ -204,15 +204,15 @@ class MessagesTests(unittest.TestCase):
     def test_get_valid_user_id(self):
         self.create_test_users()
         with self.app.app_context():
-            self.assertRaises(UserException, get_valid_user_id, None)
+            self.assertRaises(UserNotExistsError, get_valid_user_id, None)
 
-            self.assertRaises(UserException, get_valid_user_id, "notAnId")
+            self.assertRaises(UserNotExistsError, get_valid_user_id, "notAnId")
 
-            self.assertRaises(UserException, get_valid_user_id, "100")
+            self.assertRaises(UserNotExistsError, get_valid_user_id, "100")
 
-            self.assertRaises(UserException, get_valid_user_id, 100)
+            self.assertRaises(UserNotExistsError, get_valid_user_id, 100)
 
-            self.assertRaises(UserException, get_valid_user_id, -1)
+            self.assertRaises(UserNotExistsError, get_valid_user_id, -1)
 
             userId = User.query.first().id
             id = get_valid_user_id(userId)

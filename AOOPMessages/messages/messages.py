@@ -7,7 +7,7 @@ from flask import flash
 from flask_login import current_user
 from AOOPMessages import db
 from AOOPMessages.models import Message, User
-from AOOPMessages.messages.helpers import UserException
+from AOOPMessages.messages.helpers import UserNotExistsError
 from AOOPMessages.messages import helpers
 
 
@@ -104,6 +104,6 @@ def send_post():
 
         return redirect(url_for('messages.inbox'))
 
-    except UserException as e:
+    except UserNotExistsError as e:
         flash(message=str(e), category='error')
         return redirect(url_for('messages.send'))

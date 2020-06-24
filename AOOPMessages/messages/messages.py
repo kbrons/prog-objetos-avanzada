@@ -34,14 +34,14 @@ def inbox():
     if not current_user.is_authenticated:
         return redirect(url_for(AUTH_LOGIN_BLUEPRINT))
 
-    receivedMessages = Message.query.filter_by(
+    received_messages = Message.query.filter_by(
         receiver_id=current_user.id
     ).join(
         Message.author
     ).all()
 
     return render_template('messages.html',
-                           receivedMessages=receivedMessages)
+                           receivedMessages=received_messages)
 
 
 @messages.route('/messages/send', methods=['GET'])

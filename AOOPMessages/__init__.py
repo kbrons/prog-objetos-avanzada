@@ -1,3 +1,23 @@
+"""AOOPMessages module.
+
+This module provides a method to create the AOOPMessages Flask app.
+
+Example
+-------
+    from AOOPMessages import create_app
+
+    app = create_app()
+
+Attributes
+----------
+    db : SQLAlchemy
+        Instance of the SQLAlchemy ORM Flask integration
+    bootstrap : Bootstrap
+        Instance of the Bootstrap Flask integration
+    login_manager : LoginManager
+        Instance of the Login Manager Flask integration
+"""
+
 from flask import Flask
 from .config import config
 from flask_sqlalchemy import SQLAlchemy
@@ -11,6 +31,19 @@ login_manager = LoginManager()
 
 
 def create_app(config_name='development'):
+    """Create App.
+    Creates and initializes the AOOPMessages Flask app.
+
+    Parameters
+    ----------
+    config_name : str
+        Name of the configuration to use for initialization.
+
+    Returns
+    -------
+    Flask
+        Initialized AOOPMessages Flask app.
+    """
 
     app = Flask(__name__)
 

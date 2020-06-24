@@ -6,6 +6,7 @@ from werkzeug.security import generate_password_hash
 
 
 TEST_DB = 'test.db'
+MAIN_HOME_CONTENT = 'Advanced object oriented programming'
 
 
 class AuthTests(unittest.TestCase):
@@ -35,7 +36,7 @@ class AuthTests(unittest.TestCase):
     def test_main_page(self):
         response = self.test_client.get('/', follow_redirects=True)
         self.assertEqual(response.status_code, 200)
-        self.assertIn("Advanced object oriented programming",
+        self.assertIn(MAIN_HOME_CONTENT,
                       str(response.data))
 
     def test_404(self):
@@ -111,7 +112,7 @@ class AuthTests(unittest.TestCase):
             follow_redirects=True)
 
         self.assertEqual(response.status_code, 200)
-        self.assertIn("Advanced object oriented programming",
+        self.assertIn(MAIN_HOME_CONTENT,
                       str(response.data))
 
     def test_failed_signup(self):
@@ -165,7 +166,7 @@ class AuthTests(unittest.TestCase):
             follow_redirects=True)
 
         self.assertEqual(response.status_code, 200)
-        self.assertIn("Advanced object oriented programming",
+        self.assertIn(MAIN_HOME_CONTENT,
                       str(response.data))
 
     @patch('flask_login.utils._get_user')
@@ -177,7 +178,7 @@ class AuthTests(unittest.TestCase):
             follow_redirects=True)
 
         self.assertEqual(response.status_code, 200)
-        self.assertIn("Advanced object oriented programming",
+        self.assertIn(MAIN_HOME_CONTENT,
                       str(response.data))
 
 

@@ -21,7 +21,7 @@ def inbox():
 
     Response codes
     --------
-        - 301:
+        - 302:
             description: The user is not logged in. Redirected to login page.
         - 200:
             description: Returns the Inbox page with all the received messages.
@@ -50,7 +50,7 @@ def send():
 
     Response codes
     --------
-        - 301:
+        - 302:
             description: The user is not logged in. Redirected to login page.
         - 200:
             description: Returns the send message form page.
@@ -86,7 +86,7 @@ def send_post():
 
     Response codes
     --------
-        - 301:
+        - 302:
             description: The user is not logged in. Redirected to login page.
         - 200:
             description: Sent the message and redirects to Inbox.

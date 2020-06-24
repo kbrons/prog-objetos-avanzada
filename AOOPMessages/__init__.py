@@ -32,4 +32,8 @@ def create_app(config_name='development'):
     from AOOPMessages.errors.errors_handler import errors
     app.register_blueprint(errors)
 
+    with app.app_context():
+        db.create_all()
+        db.session.commit()
+
     return app

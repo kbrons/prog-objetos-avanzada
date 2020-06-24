@@ -1,3 +1,8 @@
+"""Test Auth module.
+
+This module contains the unit tests for the Auth module.
+"""
+
 import unittest
 from unittest.mock import patch
 from AOOPMessages import create_app, db
@@ -12,8 +17,11 @@ SIGNUP_ENDPOINT = '/signup'
 
 
 class AuthTests(unittest.TestCase):
+    """Auth tests class.
 
-    # executed prior to each test
+    Class defining the unit tests for the Auth module.
+    """
+
     def setUp(self):
         app = create_app(config_name='testing')
         self.app = app

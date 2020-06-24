@@ -1,3 +1,8 @@
+"""Test Messages module.
+
+This module contains the unit tests for the Messages module.
+"""
+
 import unittest
 from unittest.mock import patch, Mock
 from AOOPMessages import create_app, db
@@ -13,8 +18,11 @@ DATE_FORMAT = '%Y-%m-%d'
 
 
 class MessagesTests(unittest.TestCase):
+    """Messages tests class.
 
-    # executed prior to each test
+    Class defining the unit tests for the Messages module.
+    """
+
     def setUp(self):
         app = create_app(config_name='testing')
         self.app = app

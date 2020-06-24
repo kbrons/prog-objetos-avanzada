@@ -7,6 +7,8 @@ from werkzeug.security import generate_password_hash
 
 TEST_DB = 'test.db'
 MAIN_HOME_CONTENT = 'Advanced object oriented programming'
+LOGIN_ENDPOINT = '/login'
+SIGNUP_ENDPOINT = '/signup'
 
 
 class AuthTests(unittest.TestCase):
@@ -44,7 +46,7 @@ class AuthTests(unittest.TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_successful_login(self):
-        response = self.test_client.get('/login', follow_redirects=True)
+        response = self.test_client.get(LOGIN_ENDPOINT, follow_redirects=True)
         self.assertEqual(response.status_code, 200)
         self.assertIn("Login",
                       str(response.data))
@@ -56,9 +58,9 @@ class AuthTests(unittest.TestCase):
         self.create_test_user()
 
         response = self.test_client.post(
-            '/login', data=dict(email=self.testUser.email,
-                                password=self.testUserPassword
-                                ),
+            LOGIN_ENDPOINT, data=dict(email=self.testUser.email,
+                                      password=self.testUserPassword
+                                      ),
             follow_redirects=True)
 
         self.assertEqual(response.status_code, 200)
@@ -67,9 +69,9 @@ class AuthTests(unittest.TestCase):
 
     def test_failed_login(self):
         response = self.test_client.post(
-            '/login', data=dict(email=self.testUser.email,
-                                password='wrongPassword'
-                                ),
+            LOGIN_ENDPOINT, data=dict(email=self.testUser.email,
+                                      password='wrongPassword'
+                                      ),
             follow_redirects=True)
 
         self.assertEqual(response.status_code, 200)
@@ -77,9 +79,9 @@ class AuthTests(unittest.TestCase):
                       str(response.data))
 
         response = self.test_client.post(
-            '/login', data=dict(email='wrongEmail',
-                                password='wrongPassword'
-                                ),
+            LOGIN_ENDPOINT, data=dict(email='wrongEmail',
+                                      password='wrongPassword'
+                                      ),
             follow_redirects=True)
 
         self.assertEqual(response.status_code, 200)
@@ -96,7 +98,7 @@ class AuthTests(unittest.TestCase):
                       str(response.data))
 
     def test_successful_signup(self):
-        response = self.test_client.get('/signup', follow_redirects=True)
+        response = self.test_client.get(SIGNUP_ENDPOINT, follow_redirects=True)
         self.assertEqual(response.status_code, 200)
         self.assertIn("Sign Up",
                       str(response.data))
@@ -106,9 +108,9 @@ class AuthTests(unittest.TestCase):
                       str(response.data))
 
         response = self.test_client.post(
-            '/signup', data=dict(email=self.testUser.email,
-                                 password=self.testUserPassword
-                                 ),
+            SIGNUP_ENDPOINT, data=dict(email=self.testUser.email,
+                                       password=self.testUserPassword
+                                       ),
             follow_redirects=True)
 
         self.assertEqual(response.status_code, 200)
@@ -116,7 +118,7 @@ class AuthTests(unittest.TestCase):
                       str(response.data))
 
     def test_failed_signup(self):
-        response = self.test_client.get('/signup', follow_redirects=True)
+        response = self.test_client.get(SIGNUP_ENDPOINT, follow_redirects=True)
         self.assertEqual(response.status_code, 200)
         self.assertIn("Sign Up",
                       str(response.data))
@@ -128,9 +130,9 @@ class AuthTests(unittest.TestCase):
         self.create_test_user()
 
         response = self.test_client.post(
-            '/signup', data=dict(email=self.testUser.email,
-                                 password=self.testUserPassword
-                                 ),
+            SIGNUP_ENDPOINT, data=dict(email=self.testUser.email,
+                                       password=self.testUserPassword
+                                       ),
             follow_redirects=True)
 
         self.assertEqual(response.status_code, 200)
@@ -138,9 +140,9 @@ class AuthTests(unittest.TestCase):
                       str(response.data))
 
         response = self.test_client.post(
-            '/signup', data=dict(
-                                 password=self.testUserPassword
-                                 ),
+            SIGNUP_ENDPOINT, data=dict(
+                password=self.testUserPassword
+            ),
             follow_redirects=True)
 
         self.assertEqual(response.status_code, 200)
@@ -148,9 +150,9 @@ class AuthTests(unittest.TestCase):
                       str(response.data))
 
         response = self.test_client.post(
-            '/signup', data=dict(
-                                 email="testEmail@test.com"
-                                 ),
+            SIGNUP_ENDPOINT, data=dict(
+                email="testEmail@test.com"
+            ),
             follow_redirects=True)
 
         self.assertEqual(response.status_code, 200)
@@ -162,7 +164,7 @@ class AuthTests(unittest.TestCase):
         current_user.return_value = self.testUser
 
         response = self.test_client.get(
-            '/login',
+            LOGIN_ENDPOINT,
             follow_redirects=True)
 
         self.assertEqual(response.status_code, 200)
@@ -174,7 +176,7 @@ class AuthTests(unittest.TestCase):
         current_user.return_value = self.testUser
 
         response = self.test_client.get(
-            '/signup',
+            SIGNUP_ENDPOINT,
             follow_redirects=True)
 
         self.assertEqual(response.status_code, 200)

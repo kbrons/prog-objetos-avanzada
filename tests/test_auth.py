@@ -25,7 +25,7 @@ class AuthTests(unittest.TestCase):
 
             self.testUserPassword = 'test'
             self.testUser = User(
-                email="test", password=generate_password_hash(
+                email='test', password=generate_password_hash(
                     self.testUserPassword))
 
         self.assertEqual(app.debug, False)
@@ -48,11 +48,11 @@ class AuthTests(unittest.TestCase):
     def test_successful_login(self):
         response = self.test_client.get(LOGIN_ENDPOINT, follow_redirects=True)
         self.assertEqual(response.status_code, 200)
-        self.assertIn("Login",
+        self.assertIn('Login',
                       str(response.data))
-        self.assertIn("Email",
+        self.assertIn('Email',
                       str(response.data))
-        self.assertIn("Password",
+        self.assertIn('Password',
                       str(response.data))
 
         self.create_test_user()
@@ -64,7 +64,7 @@ class AuthTests(unittest.TestCase):
             follow_redirects=True)
 
         self.assertEqual(response.status_code, 200)
-        self.assertIn("Logout",
+        self.assertIn('Logout',
                       str(response.data))
 
     def test_failed_login(self):
@@ -75,7 +75,7 @@ class AuthTests(unittest.TestCase):
             follow_redirects=True)
 
         self.assertEqual(response.status_code, 200)
-        self.assertIn("Please check your login details and try again...",
+        self.assertIn('Please check your login details and try again...',
                       str(response.data))
 
         response = self.test_client.post(
@@ -85,7 +85,7 @@ class AuthTests(unittest.TestCase):
             follow_redirects=True)
 
         self.assertEqual(response.status_code, 200)
-        self.assertIn("Please check your login details and try again...",
+        self.assertIn('Please check your login details and try again...',
                       str(response.data))
 
     def test_successful_logout(self):
@@ -94,17 +94,17 @@ class AuthTests(unittest.TestCase):
             follow_redirects=True)
 
         self.assertEqual(response.status_code, 200)
-        self.assertIn("Login",
+        self.assertIn('Login',
                       str(response.data))
 
     def test_successful_signup(self):
         response = self.test_client.get(SIGNUP_ENDPOINT, follow_redirects=True)
         self.assertEqual(response.status_code, 200)
-        self.assertIn("Sign Up",
+        self.assertIn('Sign Up',
                       str(response.data))
-        self.assertIn("Email",
+        self.assertIn('Email',
                       str(response.data))
-        self.assertIn("Password",
+        self.assertIn('Password',
                       str(response.data))
 
         response = self.test_client.post(
@@ -120,11 +120,11 @@ class AuthTests(unittest.TestCase):
     def test_failed_signup(self):
         response = self.test_client.get(SIGNUP_ENDPOINT, follow_redirects=True)
         self.assertEqual(response.status_code, 200)
-        self.assertIn("Sign Up",
+        self.assertIn('Sign Up',
                       str(response.data))
-        self.assertIn("Email",
+        self.assertIn('Email',
                       str(response.data))
-        self.assertIn("Password",
+        self.assertIn('Password',
                       str(response.data))
 
         self.create_test_user()
@@ -136,7 +136,7 @@ class AuthTests(unittest.TestCase):
             follow_redirects=True)
 
         self.assertEqual(response.status_code, 200)
-        self.assertIn("Email address already exists...",
+        self.assertIn('Email address already exists...',
                       str(response.data))
 
         response = self.test_client.post(
@@ -146,17 +146,17 @@ class AuthTests(unittest.TestCase):
             follow_redirects=True)
 
         self.assertEqual(response.status_code, 200)
-        self.assertIn("Email is required",
+        self.assertIn('Email is required',
                       str(response.data))
 
         response = self.test_client.post(
             SIGNUP_ENDPOINT, data=dict(
-                email="testEmail@test.com"
+                email='testEmail@test.com'
             ),
             follow_redirects=True)
 
         self.assertEqual(response.status_code, 200)
-        self.assertIn("Password is required",
+        self.assertIn('Password is required',
                       str(response.data))
 
     @patch('flask_login.utils._get_user')
@@ -184,5 +184,5 @@ class AuthTests(unittest.TestCase):
                       str(response.data))
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

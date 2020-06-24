@@ -7,6 +7,8 @@ from datetime import datetime, timedelta
 from AOOPMessages.messages.helpers import get_valid_user_id, UserNotExistsError
 
 TEST_DB = 'test.db'
+INBOX_ENDPOINT = '/messages'
+SEND_MESSAGE_ENDPOINT = '/messages/send'
 
 
 class MessagesTests(unittest.TestCase):
@@ -23,22 +25,22 @@ class MessagesTests(unittest.TestCase):
 
             self.testUserPassword = 'test'
             self.testUser = User(
-                email="test", password=generate_password_hash(
+                email='test', password=generate_password_hash(
                     self.testUserPassword))
 
             self.testUser2 = User(
-                email="test2", password=generate_password_hash(
+                email='test2', password=generate_password_hash(
                     self.testUserPassword))
 
             self.testMessage = Message(
-                title="test title 1",
-                body="test body 1",
+                title='test title 1',
+                body='test body 1',
                 timestamp=datetime.utcnow() - timedelta(days=5),
             )
 
             self.testMessage2 = Message(
-                title="test title 2",
-                body="test body 2",
+                title='test title 2',
+                body='test body 2',
                 timestamp=datetime.utcnow(),
             )
 
@@ -69,9 +71,9 @@ class MessagesTests(unittest.TestCase):
 
         current_user.return_value = self.testUser
 
-        response = self.test_client.get('/messages', follow_redirects=True)
+        response = self.test_client.get(INBOX_ENDPOINT, follow_redirects=True)
         self.assertEqual(response.status_code, 200)
-        self.assertIn("Inbox",
+        self.assertIn('Inbox',
                       str(response.data))
         self.assertIn(self.testMessage2.title,
                       str(response.data))
@@ -91,9 +93,9 @@ class MessagesTests(unittest.TestCase):
 
         current_user.return_value = self.testUser2
 
-        response = self.test_client.get('/messages', follow_redirects=True)
+        response = self.test_client.get(INBOX_ENDPOINT, follow_redirects=True)
         self.assertEqual(response.status_code, 200)
-        self.assertIn("Inbox",
+        self.assertIn('Inbox',
                       str(response.data))
         self.assertIn(self.testMessage.title,
                       str(response.data))
@@ -112,9 +114,9 @@ class MessagesTests(unittest.TestCase):
                          str(response.data))
 
     def test_inbox_not_logged_in(self):
-        response = self.test_client.get('/messages', follow_redirects=True)
+        response = self.test_client.get(INBOX_ENDPOINT, follow_redirects=True)
         self.assertEqual(response.status_code, 200)
-        self.assertIn("Login",
+        self.assertIn('Login',
                       str(response.data))
 
     @patch('flask_login.utils._get_user')
@@ -124,18 +126,18 @@ class MessagesTests(unittest.TestCase):
         current_user.return_value = self.testUser
 
         response = self.test_client.get(
-            '/messages/send', follow_redirects=True)
+            SEND_MESSAGE_ENDPOINT, follow_redirects=True)
         self.assertEqual(response.status_code, 200)
-        self.assertIn("Send a message",
+        self.assertIn('Send a message',
                       str(response.data))
         self.assertIn(self.testUser2.email,
                       str(response.data))
 
     def test_send_get_not_logged_in(self):
         response = self.test_client.get(
-            '/messages/send', follow_redirects=True)
+            SEND_MESSAGE_ENDPOINT, follow_redirects=True)
         self.assertEqual(response.status_code, 200)
-        self.assertIn("Login",
+        self.assertIn('Login',
                       str(response.data))
 
     @patch('flask_login.utils._get_user')
@@ -145,45 +147,45 @@ class MessagesTests(unittest.TestCase):
 
         current_user.return_value = self.testUser
 
-        title = "test title send post"
-        body = "test body send post"
+        title = 'test title send post'
+        body = 'test body send post'
         to = 100
 
-        error_message = "test error message"
+        error_message = 'test error message'
         get_valid_user_id_mock.side_effect = Mock(
             side_effect=UserNotExistsError(error_message))
 
         response = self.test_client.post(
-            '/messages/send',
+            SEND_MESSAGE_ENDPOINT,
             data=dict(title=title,
                       body=body,
                       to=to
                       ),
             follow_redirects=True)
         self.assertEqual(response.status_code, 200)
-        self.assertIn("Send a message",
+        self.assertIn('Send a message',
                       str(response.data))
         self.assertIn(error_message,
                       str(response.data))
 
         current_user.return_value = self.testUser
 
-        title = "test title send post"
-        body = "test body send post"
+        title = 'test title send post'
+        body = 'test body send post'
         to = self.testUser2.id
 
         get_valid_user_id_mock.side_effect = None
         get_valid_user_id_mock.return_value = to
 
         response = self.test_client.post(
-            '/messages/send',
+            SEND_MESSAGE_ENDPOINT,
             data=dict(title=title,
                       body=body,
                       to=to
                       ),
             follow_redirects=True)
         self.assertEqual(response.status_code, 200)
-        self.assertIn("Inbox",
+        self.assertIn('Inbox',
                       str(response.data))
 
         with self.app.app_context():
@@ -196,9 +198,9 @@ class MessagesTests(unittest.TestCase):
 
     def test_send_post_not_logged_in(self):
         response = self.test_client.post(
-            '/messages/send', follow_redirects=True)
+            SEND_MESSAGE_ENDPOINT, follow_redirects=True)
         self.assertEqual(response.status_code, 200)
-        self.assertIn("Login",
+        self.assertIn('Login',
                       str(response.data))
 
     def test_get_valid_user_id(self):
@@ -206,9 +208,9 @@ class MessagesTests(unittest.TestCase):
         with self.app.app_context():
             self.assertRaises(UserNotExistsError, get_valid_user_id, None)
 
-            self.assertRaises(UserNotExistsError, get_valid_user_id, "notAnId")
+            self.assertRaises(UserNotExistsError, get_valid_user_id, 'notAnId')
 
-            self.assertRaises(UserNotExistsError, get_valid_user_id, "100")
+            self.assertRaises(UserNotExistsError, get_valid_user_id, '100')
 
             self.assertRaises(UserNotExistsError, get_valid_user_id, 100)
 
@@ -219,5 +221,5 @@ class MessagesTests(unittest.TestCase):
             self.assertEqual(user_id, id)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

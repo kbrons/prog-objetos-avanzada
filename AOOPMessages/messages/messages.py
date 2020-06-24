@@ -1,3 +1,8 @@
+"""AOOPMessages messages module.
+
+This module contains the implementation of the messaging system for the app.
+"""
+
 from flask import url_for
 from flask import redirect
 from flask import render_template

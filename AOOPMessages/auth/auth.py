@@ -17,6 +17,18 @@ auth = Blueprint('auth', __name__)
 
 @auth.route('/login', methods=['GET'])
 def login():
+    """This is the Login endpoint.
+    Call this endpoint to load the account login form.
+
+    Response codes
+    --------
+        - 302:
+            description: The user is logged in. Redirected to home page.
+        - 200:
+            description: Returns the Login page with a form to log into an
+            account.
+    """
+
     if current_user.is_authenticated:
         return redirect(url_for('main.home'))
     return render_template('login.html')
@@ -24,6 +36,25 @@ def login():
 
 @auth.route('/login', methods=['POST'])
 def login_post():
+    """This is the Login POST endpoint.
+    Call this endpoint to log into your account.
+
+    Parameters
+    ----------
+    email : str
+        Email of the user to log into.
+    password : str
+        Password of the user to log into.
+
+    Response codes
+    --------
+        - 302:
+            - User logged in description: User correctly logged in,
+            redirected to Inbox.
+            - Bad login data description: Email or password incorrect,
+            redirected to Login.
+    """
+
     email = request.form.get('email')
     password = request.form.get('password')
 
@@ -39,6 +70,17 @@ def login_post():
 
 @auth.route('/signup', methods=["GET"])
 def signup():
+    """This is the Sign Up endpoint.
+    Call this endpoint to load the account sign up form.
+
+    Response codes
+    --------
+        - 302:
+            description: The user is logged in. Redirected to home page.
+        - 200:
+            description: Returns the Sign Up page with a form to sign up.
+    """
+
     if current_user.is_authenticated:
         return redirect(url_for('main.home'))
     return render_template('signup.html')
@@ -46,6 +88,29 @@ def signup():
 
 @auth.route('/signup', methods=["POST"])
 def signup_post():
+    """This is the Sign Up POST endpoint.
+    Call this endpoint to Sign Up an account.
+
+    Parameters
+    ----------
+    email : str
+        Email of the user to log into.
+    password : str
+        Password of the user to log into.
+
+    Response codes
+    --------
+        - 302:
+            - Sign Up successful description: User correctly signed up
+            and logged in, redirected to Inbox.
+            - Bad sign up data description: Email or password not present,
+            redirected to Sign Up.
+            - Email already exists description: Email already belongs to
+            a user, redirected to Sign Up.
+        - 500:
+            description: There was an error creating the user.
+    """
+
     email = request.form.get('email')
     password = request.form.get('password')
 
@@ -74,5 +139,14 @@ def signup_post():
 
 @auth.route('/logout')
 def logout():
+    """This is the Logout endpoint.
+    Call this endpoint to log out of your account.
+
+    Response codes
+    --------
+        - 302:
+            description: The user is logged out. Redirected to home page.
+    """
+
     logout_user()
     return redirect(url_for('main.home'))

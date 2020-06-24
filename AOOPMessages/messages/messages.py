@@ -75,6 +75,15 @@ def send_post():
     """This is the Send message endpoint.
     Call this endpoint while logged in to send a message to another user.
 
+    Parameters
+    ----------
+    to : str
+        Id of the user to send the message to.
+    title : str
+        Title of the message.
+    body : str
+        Body of the message.
+
     Response codes
     --------
         - 301:

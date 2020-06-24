@@ -1,3 +1,8 @@
+"""AOOPMessages auth module.
+
+This module contains the implementation of the authentication for the app.
+"""
+
 from flask import url_for
 from flask import redirect
 from flask import request

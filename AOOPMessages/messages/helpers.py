@@ -1,7 +1,7 @@
 from AOOPMessages.models import User
 
 
-def get_valid_user_id(rawId):
+def get_valid_user_id(raw_id):
     """Get Valid User Id
 
     This method validates the received id and makes sure it belongs to
@@ -30,11 +30,11 @@ def get_valid_user_id(rawId):
     """
 
     try:
-        userId = int(rawId)
-        if userId < 0:
+        user_id = int(raw_id)
+        if user_id < 0:
             raise ValueError
 
-        user = User.query.filter_by(id=userId).first()
+        user = User.query.filter_by(id=user_id).first()
         if user is None:
             raise UserNotExistsError("The user doesn't exist")
 

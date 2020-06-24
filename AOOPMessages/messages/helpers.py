@@ -1,3 +1,9 @@
+"""Messages helper module.
+
+This module provides a helper method to validate user ids,
+as well as a custom exception for when the validation fails.
+"""
+
 from AOOPMessages.models import User
 
 

@@ -7,4 +7,13 @@ main = Blueprint('main', __name__)
 @main.route('/')
 @main.route('/home')
 def home():
+    """This is the Home endpoint.
+    Call this endpoint to load the home page of the website.
+
+    Response codes
+    --------
+        - 200:
+            description: Returns the Home page.
+    """
+
     return render_template('index.html')

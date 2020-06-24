@@ -13,6 +13,8 @@ from AOOPMessages.messages import helpers
 
 messages = Blueprint('messages', __name__)
 
+AUTH_LOGIN_BLUEPRINT = 'auth.login'
+
 
 @messages.route('/messages', methods=['GET'])
 def inbox():
@@ -30,7 +32,7 @@ def inbox():
                 current user.
     """
     if not current_user.is_authenticated:
-        return redirect(url_for('auth.login'))
+        return redirect(url_for(AUTH_LOGIN_BLUEPRINT))
 
     receivedMessages = Message.query.filter_by(
         receiver_id=current_user.id
@@ -60,7 +62,7 @@ def send():
     """
 
     if not current_user.is_authenticated:
-        return redirect(url_for('auth.login'))
+        return redirect(url_for(AUTH_LOGIN_BLUEPRINT))
 
     users = User.query.filter(
         User.id != current_user.id
@@ -95,7 +97,7 @@ def send_post():
     """
 
     if not current_user.is_authenticated:
-        return redirect(url_for('auth.login'))
+        return redirect(url_for(AUTH_LOGIN_BLUEPRINT))
 
     try:
         receiver_id = helpers.get_valid_user_id(

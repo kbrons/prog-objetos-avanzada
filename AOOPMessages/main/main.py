@@ -1,3 +1,8 @@
+"""AOOPMessages main module.
+
+This module contains the implementation of the home page.
+"""
+
 from flask import Blueprint
 from flask import render_template
 

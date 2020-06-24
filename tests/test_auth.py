@@ -27,9 +27,6 @@ class AuthTests(unittest.TestCase):
 
         self.assertEqual(app.debug, False)
 
-    def tearDown(self):
-        pass
-
     def create_test_user(self):
         with self.app.app_context():
             db.session.add(self.testUser)

@@ -9,6 +9,7 @@ from AOOPMessages.messages.helpers import get_valid_user_id, UserNotExistsError
 TEST_DB = 'test.db'
 INBOX_ENDPOINT = '/messages'
 SEND_MESSAGE_ENDPOINT = '/messages/send'
+DATE_FORMAT = '%Y-%m-%d'
 
 
 class MessagesTests(unittest.TestCase):
@@ -79,7 +80,7 @@ class MessagesTests(unittest.TestCase):
                       str(response.data))
         self.assertIn(self.testMessage2.body,
                       str(response.data))
-        self.assertIn(self.testMessage2.timestamp.strftime('%Y-%m-%d'),
+        self.assertIn(self.testMessage2.timestamp.strftime(DATE_FORMAT),
                       str(response.data))
         self.assertIn(str(self.testUser2.email),
                       str(response.data))
@@ -88,7 +89,7 @@ class MessagesTests(unittest.TestCase):
                          str(response.data))
         self.assertNotIn(self.testMessage.body,
                          str(response.data))
-        self.assertNotIn(self.testMessage.timestamp.strftime('%Y-%m-%d'),
+        self.assertNotIn(self.testMessage.timestamp.strftime(DATE_FORMAT),
                          str(response.data))
 
         current_user.return_value = self.testUser2
@@ -101,7 +102,7 @@ class MessagesTests(unittest.TestCase):
                       str(response.data))
         self.assertIn(self.testMessage.body,
                       str(response.data))
-        self.assertIn(self.testMessage.timestamp.strftime('%Y-%m-%d'),
+        self.assertIn(self.testMessage.timestamp.strftime(DATE_FORMAT),
                       str(response.data))
         self.assertIn(str(self.testUser.email),
                       str(response.data))
@@ -110,7 +111,7 @@ class MessagesTests(unittest.TestCase):
                          str(response.data))
         self.assertNotIn(self.testMessage2.body,
                          str(response.data))
-        self.assertNotIn(self.testMessage2.timestamp.strftime('%Y-%m-%d'),
+        self.assertNotIn(self.testMessage2.timestamp.strftime(DATE_FORMAT),
                          str(response.data))
 
     def test_inbox_not_logged_in(self):
@@ -217,8 +218,8 @@ class MessagesTests(unittest.TestCase):
             self.assertRaises(UserNotExistsError, get_valid_user_id, -1)
 
             user_id = User.query.first().id
-            id = get_valid_user_id(user_id)
-            self.assertEqual(user_id, id)
+            validated_user_id = get_valid_user_id(user_id)
+            self.assertEqual(user_id, validated_user_id)
 
 
 if __name__ == '__main__':

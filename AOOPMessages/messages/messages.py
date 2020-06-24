@@ -16,6 +16,19 @@ messages = Blueprint('messages', __name__)
 
 @messages.route('/messages', methods=['GET'])
 def inbox():
+    """This is the Inbox endpoint.
+    Call this endpoint while logged in to read your messages
+
+    Response codes
+    --------
+        - 301:
+            description: The user is not logged in. Redirected to login page.
+        - 200:
+            description: Returns the Inbox page with all the received messages.
+        - 500:
+            description: There was an error retrieving the messages for the
+                current user.
+    """
     if not current_user.is_authenticated:
         return redirect(url_for('auth.login'))
 
@@ -31,6 +44,21 @@ def inbox():
 
 @messages.route('/messages/send', methods=['GET'])
 def send():
+    """This is the Send message form endpoint.
+    Call this endpoint while logged in to fill and send a message for another
+        user.
+
+    Response codes
+    --------
+        - 301:
+            description: The user is not logged in. Redirected to login page.
+        - 200:
+            description: Returns the send message form page.
+        - 500:
+            description: There was an error retrieving the users to send
+                a message to.
+    """
+
     if not current_user.is_authenticated:
         return redirect(url_for('auth.login'))
 
@@ -44,6 +72,19 @@ def send():
 
 @messages.route('/messages/send', methods=['POST'])
 def send_post():
+    """This is the Send message endpoint.
+    Call this endpoint while logged in to send a message to another user.
+
+    Response codes
+    --------
+        - 301:
+            description: The user is not logged in. Redirected to login page.
+        - 200:
+            description: Sent the message and redirects to Inbox.
+        - 500:
+            description: There was an error sending the message.
+    """
+
     if not current_user.is_authenticated:
         return redirect(url_for('auth.login'))
 
